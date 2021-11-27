@@ -1,0 +1,348 @@
+"Script"
+
+local torso = script.Parent.Parent.Parent:WaitForChild("HumanoidRootPart")
+local bp = script.Parent:WaitForChild("BodyPosition")
+local bg = script.Parent:WaitForChild("BodyGyro")
+local pety = script.Parent:WaitForChild("pety").Value
+local petx = 4
+
+local currentForce = bp.MaxForce
+
+wait()
+script.Parent:SetNetworkOwner(game.Players:GetPlayerFromCharacter(torso.Parent))
+
+for _ = 1, math.huge, 0.00001 do
+    if script.Parent.Name == "pet1" then
+        petx = 4
+    elseif script.Parent.Name == "pet2" then
+        petx = 2
+    elseif script.Parent.Name == "pet3" then
+        petx = 0
+    elseif script.Parent.Name == "pet4" then
+        petx = -2
+    elseif script.Parent.Name == "pet5" then
+        petx = -4
+	elseif script.Parent.Name == "pet6" then
+        petx = 4
+	elseif script.Parent.Name == "pet7" then
+        petx = 2
+	elseif script.Parent.Name == "pet8" then
+        petx = -2
+	elseif script.Parent.Name == "pet9" then
+        petx = -4
+    end
+	if (torso.Position-script.Parent.Position).Magnitude > 50 then
+        bp.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+    elseif (torso.Position-script.Parent.Position).Magnitude < 50 and bp.MaxForce ~= currentForce then
+        bp.MaxForce = currentForce
+    end
+	if script.Parent.Name == "pet6" or script.Parent.Name == "pet7" or script.Parent.Name == "pet8" or script.Parent.Name == "pet9" then
+		bp.Position = ((torso.CFrame * CFrame.new(petx, pety/100, 0)).Position)
+	else
+		bp.Position = ((torso.CFrame * CFrame.new(petx, pety/100, 3)).Position)
+	end 
+    bg.CFrame = torso.CFrame
+    wait(0.05)
+end
+
+
+"Eggs"
+
+local module = {
+	["Common"] = {
+		["Cost"] = 250,
+		["Pets"] = {
+			["1"] = {100},
+		}
+	}
+}
+return module
+
+
+"PETS"
+
+game.Players.PlayerAdded:connect(function(p)
+	local stats = Instance.new("IntValue")
+	stats.Name = "leaderstats"
+	stats.Parent = p
+	
+	local money = Instance.new("IntValue")
+	money.Name = "Coins" 
+	money.Value = 100000
+	money.Parent = stats
+end)
+
+
+
+"LocalScript"
+
+script.Parent.MouseButton1Click:Connect(function()
+	script.Parent.Parent.Parent.Shop:TweenPosition(UDim2.new(0.5, 0,0, -1000), "Out", "Bounce", 1)
+end)
+
+
+"BIN"
+
+local player = script.Parent.Parent.Parent.Parent.Parent
+local enabled = false
+local id = 6172711
+
+repeat
+wait(1)
+script.Parent:WaitForChild("Scroll"):ClearAllChildren()
+for k,g in pairs(player:WaitForChild("Pets"):GetChildren()) do
+	for i,n in pairs(player:WaitForChild("Pets"):GetChildren()) do
+		local SP = game.ReplicatedStorage:WaitForChild("Pets")
+			for i=1,n.Value do
+				local new = script:WaitForChild("Template"):Clone()
+				new.Name = tostring(n)
+				if SP:FindFirstChild(tostring(n)) and SP[tostring(n)]:FindFirstChild("Icon") and SP[tostring(n)]:FindFirstChild("CoinBoost") then
+					new:WaitForChild("PNG").Image = SP[tostring(n)].Icon.Value
+					new:WaitForChild("Boost").BoostInfo.Text = "+" .. SP[tostring(n)].CoinBoost.Value
+				end
+				new.Parent = script.Parent:WaitForChild("Scroll")
+			end
+		end
+	script:WaitForChild("UIGridLayout"):Clone().Parent = script.Parent:WaitForChild("Scroll")
+g.Changed:Connect(function()
+	script.Parent:WaitForChild("Scroll"):ClearAllChildren()
+	for i,n in pairs(player:WaitForChild("Pets"):GetChildren()) do
+		local SP = game.ReplicatedStorage:WaitForChild("Pets")
+		for i=1,n.Value do
+			local new = script:WaitForChild("Template"):Clone()
+			new.Name = tostring(n)
+			if SP:FindFirstChild(tostring(n)) and SP[tostring(n)]:FindFirstChild("Icon") and SP[tostring(n)]:FindFirstChild("CoinBoost") then
+				new:WaitForChild("PNG").Image = SP[tostring(n)].Icon.Value
+				new:WaitForChild("Boost").BoostInfo.Text = "+" .. SP[tostring(n)].CoinBoost.Value
+			end
+		new.Parent = script.Parent:WaitForChild("Scroll")
+	end
+script:WaitForChild("UIGridLayout"):Clone().Parent = script.Parent:WaitForChild("Scroll")
+	for i,v in pairs(script.Parent:WaitForChild("Scroll"):GetChildren()) do
+		if v:IsA("ImageLabel") then
+			v:WaitForChild("Equip").MouseButton1Down:Connect(function()
+				if enabled == false then
+					enabled = true
+						local char = player.Character
+							local pets = game:GetService("ReplicatedStorage"):WaitForChild("Pets")
+								if char and pets then	
+									local pp = player:WaitForChild("Pets")
+									local getp = 0
+									for g,h in pairs(player:WaitForChild("PetsEquiped"):GetChildren())do
+										if tostring(h) == tostring(v) then
+											getp = getp + 1
+										end
+									end
+									if pp:FindFirstChild(tostring(v)) and pp[tostring(v)].Value > getp then 						
+										if not char:WaitForChild("HumanoidRootPart"):FindFirstChild("pet1") then
+											if player:WaitForChild("Pets"):FindFirstChild(tostring(v)) then
+												local vv = Instance.new("StringValue")
+												vv.Value = "pet1"
+												vv.Name = tostring(v)
+												vv.Parent = player:WaitForChild("PetsEquiped") 
+											end
+										elseif not char:WaitForChild("HumanoidRootPart"):FindFirstChild("pet2") then
+											if player:WaitForChild("Pets"):FindFirstChild(tostring(v)) then
+												local vv = Instance.new("StringValue")
+												vv.Value = "pet2"
+												vv.Name = tostring(v)
+												vv.Parent = player:WaitForChild("PetsEquiped")
+											end
+										elseif not char:WaitForChild("HumanoidRootPart"):FindFirstChild("pet3") then
+											if player:WaitForChild("Pets"):FindFirstChild(tostring(v)) then
+												local vv = Instance.new("StringValue")
+												vv.Value = "pet3"
+												vv.Name = tostring(v)
+												vv.Parent = player:WaitForChild("PetsEquiped")
+											end
+										elseif not char:WaitForChild("HumanoidRootPart"):FindFirstChild("pet4") then
+											if player:WaitForChild("Pets"):FindFirstChild(tostring(v)) then
+												local vv = Instance.new("StringValue")
+												vv.Value = "pet4"
+												vv.Name = tostring(v)
+												vv.Parent = player:WaitForChild("PetsEquiped")
+											end
+										elseif not char:WaitForChild("HumanoidRootPart"):FindFirstChild("pet5") then
+											if player:WaitForChild("Pets"):FindFirstChild(tostring(v)) then
+												local vv = Instance.new("StringValue")
+												vv.Value = "pet5"
+												vv.Name = tostring(v)
+												vv.Parent = player:WaitForChild("PetsEquiped")
+											end
+										elseif not char:WaitForChild("HumanoidRootPart"):FindFirstChild("pet6") then
+											if player:WaitForChild("Pets"):FindFirstChild(tostring(v)) and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(player.UserId, id) then 
+												local vv = Instance.new("StringValue")
+												vv.Value = "pet6"
+												vv.Name = tostring(v)
+												vv.Parent = player:WaitForChild("PetsEquiped")
+											end
+										elseif not char:WaitForChild("HumanoidRootPart"):FindFirstChild("pet7") then
+											if player:WaitForChild("Pets"):FindFirstChild(tostring(v)) and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(player.UserId, id) then
+												local vv = Instance.new("StringValue")
+												vv.Value = "pet7"
+												vv.Name = tostring(v)
+												vv.Parent = player:WaitForChild("PetsEquiped")
+											end
+										elseif not char:WaitForChild("HumanoidRootPart"):FindFirstChild("pet8") then
+											if player:WaitForChild("Pets"):FindFirstChild(tostring(v)) and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(player.UserId, id) then
+												local vv = Instance.new("StringValue")
+												vv.Value = "pet8"
+												vv.Name = tostring(v)
+												vv.Parent = player:WaitForChild("PetsEquiped")
+											end
+										elseif not char:WaitForChild("HumanoidRootPart"):FindFirstChild("pet9") then
+											if player:WaitForChild("Pets"):FindFirstChild(tostring(v)) and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(player.UserId, id) then
+												local vv = Instance.new("StringValue")
+												vv.Value = "pet9"
+												vv.Name = tostring(v)
+												vv.Parent = player:WaitForChild("PetsEquiped")
+												end
+											end
+										end
+										wait(1)
+									enabled = false
+								end	
+							end
+						end)
+					end
+				end
+			end
+		end)
+	end
+until not #player:WaitForChild("Pets"):GetChildren() ~=  #game.ReplicatedStorage:WaitForChild("Pets"):GetChildren()
+
+
+
+"BIN"
+
+local player = script.Parent.Parent.Parent.Parent.Parent
+local enabled = false
+player:WaitForChild("PetsEquiped").ChildAdded:Connect(function(name)
+	local new = game.ReplicatedStorage:WaitForChild("Pets")[tostring(name)]:Clone()
+	player:WaitForChild("CoinBoost").Value = player:WaitForChild("CoinBoost").Value + new:WaitForChild("CoinBoost").Value
+	new.Name = name.Value
+	new.Parent = player.Character:WaitForChild("HumanoidRootPart")
+end)
+player:WaitForChild("PetsEquiped").ChildRemoved:Connect(function(name)
+	if player.Character:WaitForChild("HumanoidRootPart"):FindFirstChild(tostring(name.Value)) then
+		local new = game.ReplicatedStorage:WaitForChild("Pets")[tostring(name)]
+		player:WaitForChild("CoinBoost").Value = player:WaitForChild("CoinBoost").Value - new:WaitForChild("CoinBoost").Value
+		player.Character:WaitForChild("HumanoidRootPart")[tostring(name.Value)]:Destroy()
+	end
+end)
+
+
+"BoostValue"
+
+game.Players.PlayerAdded:Connect(function(plr)
+	Instance.new("NumberValue",plr).Name = "CoinBoost"
+	Instance.new("NumberValue",plr).Name = "RebirthBoost"
+end)
+
+
+"CloneMain"
+
+game.Players.PlayerAdded:Connect(function(plr)
+	local new = game.ReplicatedStorage:WaitForChild("Server"):Clone()
+	new.Parent = plr:WaitForChild("PlayerGui")
+	plr.CharacterAdded:Connect(function(char)
+		char:WaitForChild("Humanoid").DisplayDistanceType = "None"
+		for i,v in pairs(plr:WaitForChild("PetsEquiped"):GetChildren())do
+			if game.ReplicatedStorage:WaitForChild("Pets"):FindFirstChild(tostring(v)) then
+				local get = game.ReplicatedStorage:WaitForChild("Pets")[tostring(v)]:Clone()
+				get.Name = v.Value
+				get.Parent = char:WaitForChild("HumanoidRootPart")
+			end
+		end
+	end)
+end)
+
+
+"SaveTablePets"
+
+local Players = game:GetService("Players")
+local DSService = game:GetService("DataStoreService")
+local data = DSService:GetDataStore("TablePets003")
+Players.PlayerAdded:Connect(function(player)
+	Instance.new("Folder",player).Name = "Pets"
+	Instance.new("Folder",player).Name = "PetsEquiped"
+	local key = player.UserId
+	local Pets = player:WaitForChild("Pets")
+	for i,v in pairs(game.ReplicatedStorage:WaitForChild("Pets"):GetChildren()) do
+		Instance.new("IntValue",Pets).Name = tostring(v)
+	end
+	wait(1)
+	local savedLevel = data:GetAsync(key)
+	if savedLevel ~= nil then
+		for i, data in pairs(savedLevel) do
+			local pet = Pets:FindFirstChild(data[1])
+			if pet then
+				pet.Value = data[2]
+			else
+				local instance = Instance.new(data[3])
+				if instance then
+					instance.Name = data[1]
+					instance.Value = data[2]
+					instance.Parent = Pets
+				end
+			end
+		end
+	else
+		data:SetAsync(key, {})
+	end
+end)
+Players.PlayerRemoving:Connect(function(player)
+	local key = player.UserId
+	local savedLevel = data:GetAsync(key)
+	local Pets = player:FindFirstChild("Pets")
+	if not Pets then return end
+	Pets = Pets:GetChildren()
+	local objData = {}
+	for i, obj in pairs(Pets) do
+		table.insert(objData, {obj.Name, obj.Value, obj.ClassName})
+	end
+	if savedLevel == nil then
+		data:SetAsync(key, objData)
+	else
+		data:UpdateAsync(key, function(oldValue)
+			oldValue = objData
+			return objData
+		end)
+	end
+end)
+game:BindToClose(function()
+	for i, player in pairs(Players:GetPlayers()) do
+		local key = player.UserId
+		local savedLevel = data:GetAsync(key)
+		local pets = player:FindFirstChild("Pets")
+		if not pets then return end
+		pets = pets:GetChildren()
+		local objData = {}
+		for i, obj in pairs(pets) do
+			table.insert(objData, {obj.Name, obj.Value, obj.ClassName})
+		end
+		if savedLevel == nil then
+			data:SetAsync(key, objData)
+		else
+			data:UpdateAsync(key, function(oldValue)
+				oldValue = objData
+				return objData
+			end)
+		end
+	end
+	wait(3)
+end)
+
+
+"LeaderStats"
+
+game.Players.PlayerAdded:connect(function(p)
+	local stats = Instance.new("IntValue")
+	stats.Name = "leaderstats"
+	stats.Parent = p
+	
+	local money = Instance.new("IntValue")
+	money.Name = "Coins" 
+	money.Value = 100000
+	money.Parent = stats
+end)
